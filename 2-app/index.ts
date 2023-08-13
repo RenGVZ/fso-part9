@@ -19,9 +19,13 @@ app.get("/bmi", (req, res) => {
       const myBmi = calculateBmi(height, weight)
       console.log(myBmi)
       res.json({weight, height, myBmi}).status(200)
-    } catch (error) {
+    } catch (error: unknown) {
       console.log(error)
-      res.status(400).send(error.message)
+      if(error.message) {
+        res.status(400).send(error.message)
+      } else {
+        res.status(400).send("Something went wrong")
+      }
     }
   } else {
     res.status(400).send("Something went wrong")
