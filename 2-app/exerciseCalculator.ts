@@ -1,4 +1,4 @@
-import parseArgs from "./helpers/parseArgs"
+// import parseArgs from "./helpers/parseArgs"
 import getRating from "./helpers/getRating"
 
 export interface Result {
@@ -11,7 +11,7 @@ export interface Result {
   average: number
 }
 
-const calculateExercises = (target: number, days: number[]): Result => {
+export const calculateExercises = (target: number, days: number[]): Result => {
   const periodLength: number = days.length
   const trainingDays: number = days.filter((day) =>
     day > 0 ? day : false
@@ -38,17 +38,17 @@ const calculateExercises = (target: number, days: number[]): Result => {
     average,
   }
 
-  console.log(returnValues)
+  // console.log(returnValues)
   return returnValues
 }
 
-try {
-  const { target, days } = parseArgs(process.argv)
-  calculateExercises(target, days)
-} catch (e: unknown) {
-  let errorMessage = "Error: "
-  if (e instanceof Error) {
-    errorMessage += e.message
-  }
-  console.log(errorMessage)
-}
+// try {
+//   const { target, days } = parseArgs(process.argv)
+//   calculateExercises(target, days)
+// } catch (e: unknown) {
+//   let errorMessage = "Error: "
+//   if (e instanceof Error) {
+//     errorMessage += e.message
+//   }
+//   console.log(errorMessage)
+// }
