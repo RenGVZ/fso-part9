@@ -1,12 +1,13 @@
-import express from "express";
+import express from "express"
+import diaryService from "../services/diaryService"
 const router = express.Router()
 
 router.get("/", (_req, res) => {
-  res.send("Fetching all diaries!")
+  res.send(diaryService.getNonsensitiveEntries())
 })
 
-router.post('/', (_req, res) => {
-  res.send('Saving a diary!')
+router.post("/", (_req, res) => {
+  res.send("Saving a diary!")
 })
 
 export default router
