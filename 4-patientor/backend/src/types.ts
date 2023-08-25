@@ -9,10 +9,16 @@ export type PatientType = {
   name: string
   dateOfBirth: string
   ssn: string
-  gender: string
+  gender: Gender
   occupation: string
+}
+
+export enum Gender {
+  Male = "male",
+  Female = "female",
+  Other = "other",
 }
 
 export type ProtectedPatientType = Omit<PatientType, "ssn">
 
-export type NewPatientType = Omit<PatientType, 'id'>
+export type NewPatientType = Omit<PatientType, "id">
