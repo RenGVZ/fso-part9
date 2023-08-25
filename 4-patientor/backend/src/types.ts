@@ -14,3 +14,5 @@ export type PatientType = {
 }
 
 export type ProtectedPatientType = Omit<PatientType, "ssn">
+
+export type NewPatientType = Omit<PatientType, 'id'>
