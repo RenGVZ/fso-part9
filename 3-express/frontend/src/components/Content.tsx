@@ -1,18 +1,13 @@
+import Part from "./Part"
+import { CoursePart } from "../types"
 interface Props {
-  courses: Array<{
-    name: string
-    exerciseCount: number
-  }>
+  courses: Array<CoursePart>
 }
 
 const Content = (props: Props) => {
   return (
     <>
-      {props.courses.map((course) => (
-        <p key={course.name}>
-          {course.name} {course.exerciseCount}
-        </p>
-      ))}
+      <Part courses={props.courses} />
     </>
   )
 }
