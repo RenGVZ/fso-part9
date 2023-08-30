@@ -3,7 +3,7 @@ import diaryRouter from "./routes/diaries"
 const app = express()
 app.use(express.json())
 
-const PORT = 3000
+const PORT = 3001
 
 app.use("/api/diaries", diaryRouter)
 
