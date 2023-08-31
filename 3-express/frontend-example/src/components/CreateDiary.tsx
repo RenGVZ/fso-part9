@@ -1,7 +1,7 @@
 import React, { SyntheticEvent, useReducer, useState } from "react"
 import { addDiary } from "../services"
 import { NewDiaryEntry, Weather, Visibility, Action } from "../types"
-import axios, { AxiosError } from "axios"
+import axios from "axios"
 
 const reducer = (state: NewDiaryEntry, action: Action) => {
   switch (action.type) {
