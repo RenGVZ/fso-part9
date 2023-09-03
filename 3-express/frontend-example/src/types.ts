@@ -29,5 +29,6 @@ export interface Action {
     | "CHANGE_WEATHER"
     | "CHANGE_VISIBILITY"
     | "CHANGE_COMMENT"
+    | "RESET"
   payload: string
 }
