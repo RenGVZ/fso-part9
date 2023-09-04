@@ -21,4 +21,17 @@ router.post("/", (req, res) => {
   }
 })
 
+router.get("/:id", (req, res) => {
+  try {
+    const foundPatient = patientsService.getAllPatientData(req.params.id)
+    return res.json(foundPatient)
+  } catch (error: unknown) {
+    let errorMessage = "Error fetching patient data"
+    if (error instanceof Error) {
+      errorMessage = error.message
+    }
+    return res.status(400).send(errorMessage)
+  }
+})
+
 export default router
