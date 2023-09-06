@@ -15,7 +15,26 @@ export type PatientType = {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface Entry {
+export interface Entry {}
+
+export interface BaseEntry {
+  id: string
+  description: string
+  date: string
+  specialist: string
+  diagnosisCodes?: Array<DiagnosesType["code"][]>
+}
+
+export enum HealthCheckRating {
+  "Healthy" = "0",
+  "LowRisk" = "1",
+  "HighRisk" = "2",
+  "CriticalRisk" = "3",
+}
+
+export interface HealthCheckEntry extends BaseEntry {
+  type: "HealthCheck"
+  healthCheckRating: HealthCheckRating
 }
 
 export enum Gender {
