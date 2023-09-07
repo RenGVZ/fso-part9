@@ -15,6 +15,7 @@ import patinetService from "../../services/patients"
 const PatientInfoPage = () => {
   const { id } = useParams<{ id: string }>()
   const [patient, setPatient] = useState<Patient | undefined>()
+  console.log("patient: ", patient)
 
   useEffect(() => {
     const fetchPatient = async (id: string) => {
@@ -29,11 +30,11 @@ const PatientInfoPage = () => {
   }, [id])
 
   return (
-    <Container>
+    <Container >
       {!patient ? (
         <Typography variant="h4">No patient found...</Typography>
       ) : (
-        <Card sx={{ width: 1 / 4 }}>
+        <Card sx={{ width: 4 / 4 }}>
           <CardContent>
             <CardHeader
               title={patient.name}
@@ -51,6 +52,24 @@ const PatientInfoPage = () => {
             <Typography variant="body1">
               occupation: {patient.occupation}
             </Typography>
+            <br />
+            <Typography variant="h5">entries</Typography>
+            {patient.entries.map((e) => (
+              <div key={e.id}>
+                <div style={{ display: "flex", flexDirection: "row" }}>
+                  <Typography variant="body2">{e.date}</Typography>
+                  <Typography style={{ fontStyle: "italic" }} variant="body2">
+                    {e.description}
+                  </Typography>
+                </div>
+
+                <ul>
+                  {e.diagnosisCodes?.map((code, i) => (
+                    <li key={i}>{code}</li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           </CardContent>
         </Card>
       )}
