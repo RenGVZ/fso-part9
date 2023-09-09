@@ -11,6 +11,7 @@ import FemaleIcon from "@mui/icons-material/Female"
 import MaleIcon from "@mui/icons-material/Male"
 import { useState, useEffect } from "react"
 import patinetService from "../../services/patients"
+import EntryDetails from "../EntryDetails"
 
 const PatientInfoPage = () => {
   const { id } = useParams<{ id: string }>()
@@ -56,18 +57,7 @@ const PatientInfoPage = () => {
             <Typography variant="h5">entries</Typography>
             {patient.entries.map((e) => (
               <div key={e.id}>
-                <div style={{ display: "flex", flexDirection: "row" }}>
-                  <Typography variant="body2">{e.date}</Typography>
-                  <Typography style={{ fontStyle: "italic" }} variant="body2">
-                    {e.description}
-                  </Typography>
-                </div>
-
-                <ul>
-                  {e.diagnosisCodes?.map((code, i) => (
-                    <li key={i}>{code}</li>
-                  ))}
-                </ul>
+                <EntryDetails entry={e} />
               </div>
             ))}
           </CardContent>
