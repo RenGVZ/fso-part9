@@ -3,9 +3,9 @@ import {
   PatientType,
   ProtectedPatientType,
   NewPatientType,
-  HospitalEntry,
-  OccupationalHealthcareEntry,
-  HealthCheckEntry,
+  NewHospitalEntryType,
+  NewOccupationalHealthcareEntryType,
+  NewHealthCheckEntryType,
 } from "../types"
 import { v1 as uuid } from "uuid"
 
@@ -41,61 +41,22 @@ const addPatient = (patient: NewPatientType): PatientType => {
 }
 
 const addEntry = (
-  entry: unknown,
+  entry:
+    | NewHospitalEntryType
+    | NewOccupationalHealthcareEntryType
+    | NewHealthCheckEntryType,
   patientId: string
 ) => {
-  if(!entry)
-  const id: string = uuid()
-  switch (entry.type) {
-    case "Hospital":
-      if (!entry.discharge) throw new Error("Discharge data missing")
-      const hospital: HospitalEntry = {
-        id,
-        type: "Hospital",
-        description: entry.description,
-        date: entry.date,
-        specialist: entry.specialist,
-        diagnosisCodes: entry.diagnosisCodes ?? [],
-        discharge: entry.discharge,
-      }
-      patients.find((p) =>
-        p.id === patientId ? p.entries.push(hospital) : null
-      )
-      break
-    case "OccupationalHealthcare":
-      if (!entry.employerName) throw new Error("Employer name missing")
-      const occupationalHealthcare: OccupationalHealthcareEntry = {
-        id,
-        type: "OccupationalHealthcare",
-        description: entry.description,
-        date: entry.date,
-        specialist: entry.specialist,
-        diagnosisCodes: entry.diagnosisCodes ?? [],
-        employerName: entry.employerName,
-        sickLeave: entry.sickLeave ?? undefined,
-      }
-      patients.find((p) =>
-        p.id === patientId ? p.entries.push(occupationalHealthcare) : null
-      )
-      break
-    case "HealthCheck":
-      if (!entry.healthCheckRating) throw new Error("Health check data missing")
-      const healthCheck: HealthCheckEntry = {
-        id,
-        type: "HealthCheck",
-        description: entry.description,
-        date: entry.date,
-        specialist: entry.specialist,
-        diagnosisCodes: entry.diagnosisCodes ?? [],
-        healthCheckRating: entry.healthCheckRating,
-      }
-      patients.find((p) =>
-        p.id === patientId ? p.entries.push(healthCheck) : null
-      )
-      break
-    default:
-      throw new Error("Incorrect entry type")
+  const newId: string = uuid()
+  const patient = patients.find((p) => p.id === patientId)
+  if (!patient) {
+    throw new Error(`Patient with id ${patientId} not found`)
   }
+  const newEntry = {
+    id: newId,
+    ...entry,
+  }
+  patient.entries.push(newEntry)
 }
 
 export default {

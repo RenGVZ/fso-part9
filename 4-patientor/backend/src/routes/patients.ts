@@ -1,6 +1,6 @@
 import express from "express"
 import patientsService from "../services/patientsService"
-import { toNewPatient } from "../utils"
+import { toNewPatient, toNewEntry } from "../utils"
 const router = express.Router()
 
 router.get("/", (_req, res) => {
@@ -37,9 +37,9 @@ router.get("/:id", (req, res) => {
 router.post("/addEntry/:id", (req, res) => {
   try {
     const patientId = req.params.id
-    const newEntry = req.body
+    const newEntry = toNewEntry(req.body)
     const addedEntry = patientsService.addEntry(newEntry, patientId)
-    res.json(addedEntry)
+    return res.json(addedEntry)
   } catch (error: unknown) {
     let errorMessage = "Error adding entry"
     if (error instanceof Error) {

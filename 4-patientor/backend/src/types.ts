@@ -67,3 +67,9 @@ export type ProtectedPatientType = Omit<PatientType, "ssn" | "entries">
 export type NewPatientType = Omit<PatientType, "id">
 
 export type NewEntryType = Omit<Entry, "id">
+
+export type NewHospitalEntryType = Omit<HospitalEntry, "id">
+
+export type NewOccupationalHealthcareEntryType = Omit<OccupationalHealthcareEntry, "id">
+
+export type NewHealthCheckEntryType = Omit<HealthCheckEntry, "id">
