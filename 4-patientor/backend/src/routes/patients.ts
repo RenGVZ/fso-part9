@@ -34,4 +34,19 @@ router.get("/:id", (req, res) => {
   }
 })
 
+router.post("/addEntry/:id", (req, res) => {
+  try {
+    const patientId = req.params.id
+    const newEntry = req.body
+    const addedEntry = patientsService.addEntry(newEntry, patientId)
+    res.json(addedEntry)
+  } catch (error: unknown) {
+    let errorMessage = "Error adding entry"
+    if (error instanceof Error) {
+      errorMessage = error.message
+    }
+    return res.status(400).send(errorMessage)
+  }
+})
+
 export default router
