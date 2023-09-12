@@ -57,6 +57,7 @@ const addEntry = (
     ...entry,
   }
   patient.entries.push(newEntry)
+  return newEntry
 }
 
 export default {

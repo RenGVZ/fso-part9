@@ -5,6 +5,7 @@ import {
   NewOccupationalHealthcareEntryType,
   NewHealthCheckEntryType,
   HealthCheckRating,
+  // DiagnosisType,
 } from "../types"
 
 export const toNewEntry = (
@@ -21,8 +22,7 @@ export const toNewEntry = (
     "type" in object &&
     "date" in object &&
     "specialist" in object &&
-    "description" in object &&
-    "diagnosisCodes" in object
+    "description" in object
   ) {
     switch (object.type) {
       case "Hospital":
@@ -33,7 +33,10 @@ export const toNewEntry = (
           date: parseDate(object.date),
           specialist: parseString(object.specialist, "specialist"),
           description: parseString(object.description, "description"),
-          diagnosisCodes: parseDiagnosisCodes(object.diagnosisCodes ?? []),
+          diagnosisCodes:
+            "diagnosisCodes" in object
+              ? parseDiagnosisCodes(object.diagnosisCodes)
+              : undefined,
           discharge: parseDischarge(object.discharge),
         }
         return hospitalEntry
@@ -46,8 +49,15 @@ export const toNewEntry = (
             date: parseDate(object.date),
             specialist: parseString(object.specialist, "specialist"),
             description: parseString(object.description, "description"),
-            diagnosisCodes: parseDiagnosisCodes(object.diagnosisCodes ?? []),
+            diagnosisCodes:
+              "diagnosisCodes" in object
+                ? parseDiagnosisCodes(object.diagnosisCodes)
+                : undefined,
             employerName: parseString(object.employerName, "employer name"),
+            sickLeave:
+              "sickLeave" in object && typeof object.sickLeave === "object"
+                ? parseSickLeave(object.sickLeave)
+                : undefined,
           }
         return occupationalHealthcareEntry
       case "HealthCheck":
@@ -58,7 +68,10 @@ export const toNewEntry = (
           date: parseDate(object.date),
           specialist: parseString(object.specialist, "specialist"),
           description: parseString(object.description, "description"),
-          diagnosisCodes: parseDiagnosisCodes(object.diagnosisCodes ?? []),
+          diagnosisCodes:
+            "diagnosisCodes" in object
+              ? parseDiagnosisCodes(object.diagnosisCodes)
+              : undefined,
           healthCheckRating: parseHealthCheckRating(object.healthCheckRating),
         }
         return healthCheckEntry
@@ -158,6 +171,20 @@ const parseDischarge = (
   const date = parseDate(discharge.date)
   const criteria = parseString(discharge.criteria, "discharge criteria")
   return { date, criteria }
+}
+
+const parseSickLeave = (
+  sickLeave: unknown
+): { startDate: string; endDate: string } | undefined => {
+  if (!sickLeave || typeof sickLeave !== "object") {
+    return undefined
+  }
+  if (!("startDate" in sickLeave) || !("endDate" in sickLeave)) {
+    throw new Error("Incorrect or missing sick leave data")
+  }
+  const startDate = parseDate(sickLeave.startDate)
+  const endDate = parseDate(sickLeave.endDate)
+  return { startDate, endDate }
 }
 
 const parseHealthCheckRating = (rating: unknown): HealthCheckRating => {
