@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react"
-import axios from "axios"
 import { Route, Link, Routes } from "react-router-dom"
 import { Button, Divider, Container, Typography } from "@mui/material"
-
+import axios from "axios"
 import { apiBaseUrl } from "./constants"
 import { Patient } from "./types"
 
