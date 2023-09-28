@@ -10,32 +10,76 @@ import { useParams } from "react-router-dom"
 import { Patient } from "../../types"
 import FemaleIcon from "@mui/icons-material/Female"
 import MaleIcon from "@mui/icons-material/Male"
+import Alert from "@mui/material/Alert"
 import { useState, useEffect } from "react"
 import patinetService from "../../services/patients"
 import EntryDetails from "../EntryDetails"
 import AddEntryForm from "../AddEntryForm"
+import { createEntry } from "../../services/entries"
+import axios from "axios"
 
 const PatientInfoPage = () => {
   const { id } = useParams<{ id: string }>()
   const [patient, setPatient] = useState<Patient | undefined>()
   const [isFormOpen, setIsFormOpen] = useState(false)
+  const [error, setError] = useState<string | undefined>(undefined)
+  const [success, setSuccess] = useState<string | undefined>(undefined)
   console.log("patient: ", patient)
 
-  useEffect(() => {
-    const fetchPatient = async (id: string) => {
-      try {
-        const patient = await patinetService.getOne(id)
-        setPatient(patient)
-      } catch (err) {
-        console.error(err)
-      }
+  const fetchPatient = async (id: string) => {
+    try {
+      const patient = await patinetService.getOne(id)
+      setPatient(patient)
+    } catch (err) {
+      console.error(err)
     }
+  }
+
+  useEffect(() => {
     if (id) void fetchPatient(id)
   }, [id])
 
-  const submitForm = (values: any) => {
-    console.log("values: ", values)
+  const submitForm = async (values: any) => {
+    console.log("values in parent: ", values)
+    if (id) {
+      try {
+        const entry = await createEntry(values, id)
+        console.log("entry: ", entry)
+        setSuccess("Entry created successfully")
+      } catch (e: unknown) {
+        if (axios.isAxiosError(e)) {
+          if (e?.response?.data && typeof e?.response?.data === "string") {
+            const message = e.response.data
+            console.error(message)
+            setError(message)
+          } else {
+            setError("Unrecognized axios error")
+          }
+        } else {
+          console.error("Unknown error", e)
+          setError("Unknown error")
+        }
+      }
+    }
+
+    if (id) void fetchPatient(id)
   }
+
+  useEffect(() => {
+    if (error) {
+      setTimeout(() => {
+        setError(undefined)
+      }, 5000)
+    }
+  }, [error])
+
+  useEffect(() => {
+    if(success) {
+      setTimeout(() => {
+        setSuccess(undefined)
+      }, 5000)
+    }
+  }, [success])
 
   return (
     <Container>
@@ -43,6 +87,16 @@ const PatientInfoPage = () => {
         <Typography variant="h4">No patient found...</Typography>
       ) : (
         <>
+          {error && (
+            <div style={{ position: "sticky", top: "20px" }}>
+              <Alert severity="error">{error}</Alert>
+            </div>
+          )}
+          {success && (
+            <div style={{ position: "sticky", top: "20px" }}>
+              <Alert severity="success">{success}</Alert>
+            </div>
+          )}
           <Card sx={{ width: 4 / 4, marginBottom: 2 }}>
             <CardContent>
               <CardHeader

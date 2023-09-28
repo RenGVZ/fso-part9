@@ -63,3 +63,44 @@ export interface HospitalEntry extends BaseEntry {
 }
 
 export type PatientFormValues = Omit<Patient, "id" | "entries">
+
+
+// AddEntryFormTypes
+
+export type EntryType =
+  | ""
+  | "Hospital"
+  | "OccupationalHealthcare"
+  | "HealthCheck"
+
+export interface BaseEntryFormType {
+  type: EntryType
+  description: string
+  date: string
+  specialist: string
+  diagnosisCodes: string[]
+  discharge?: {
+    date: string
+    criteria: string
+  }
+  employerName?: string
+  sickLeave?: {
+    startDate: string
+    endDate: string
+  }
+  healthCheckRating?: number
+}
+
+export type Action =
+  | { type: "type"; payload: BaseEntryFormType["type"] }
+  | { type: "description"; payload: string }
+  | { type: "date"; payload: string }
+  | { type: "specialist"; payload: string }
+  | { type: "diagnosisCodes"; payload: string[] }
+  | { type: "reset"; payload: EntryType }
+  | { type: "dischargeDate"; payload: string }
+  | { type: "dischargeCriteria"; payload: string }
+  | { type: "employerName"; payload: string }
+  | { type: "sickLeaveStart"; payload: string }
+  | { type: "sickLeaveEnd"; payload: string }
+  | { type: "healthCheckRating"; payload: number }

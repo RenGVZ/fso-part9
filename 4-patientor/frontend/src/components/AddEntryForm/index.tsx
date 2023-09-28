@@ -8,47 +8,14 @@ import {
   Typography,
 } from "@mui/material"
 import { DatePicker } from "@mui/x-date-pickers/DatePicker"
-import { useReducer, SyntheticEvent, useState, useEffect } from "react"
-
-type EntryType = "" | "Hospital" | "OccupationalHealthCare" | "HealthCheck"
-
-export interface BaseEntryFormType {
-  type: EntryType
-  description: string
-  date: string
-  specialist: string
-  diagnosisCodes: string[]
-  discharge?: {
-    date: string
-    criteria: string
-  }
-  employerName?: string
-  sickLeave?: {
-    startDate: string
-    endDate: string
-  }
-  healthCheckRating?: number
-}
-
-type Action =
-  | { type: "type"; payload: BaseEntryFormType["type"] }
-  | { type: "description"; payload: string }
-  | { type: "date"; payload: string }
-  | { type: "specialist"; payload: string }
-  | { type: "diagnosisCodes"; payload: string[] }
-  | { type: "reset"; payload: EntryType }
-  | { type: "dischargeDate"; payload: string }
-  | { type: "dischargeCriteria"; payload: string }
-  | { type: "employerName"; payload: string }
-  | { type: "sickLeaveStart"; payload: string }
-  | { type: "sickLeaveEnd"; payload: string }
-  | { type: "healthCheckRating"; payload: number }
+import { useReducer, SyntheticEvent, useState } from "react"
+import { EntryType, BaseEntryFormType, Action } from "../../types"
 
 type Props = {
   submitForm: (values: BaseEntryFormType) => void
 }
 
-const entrySelection = ["Hospital", "OccupationalHealthCare", "HealthCheck"]
+const entrySelection = ["Hospital", "OccupationalHealthcare", "HealthCheck"]
 const diagnosisCodes = [
   "M24.2",
   "M51.2",
@@ -120,7 +87,7 @@ const reducer = (values: BaseEntryFormType, action: Action) => {
         },
       }
     case "healthCheckRating":
-      return { ...values, healthCheckRating: action.payload }
+      return { ...values, healthCheckRating: action.payload}
     case "reset":
       return {
         ...initialFormState,
@@ -140,14 +107,13 @@ const AddEntryForm = (props: Props) => {
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault()
-    console.log("values: ", values)
-
-    // props.submitForm(values)
+    props.submitForm(values)
+    // dispatch({ type: "reset", payload: useType })
   }
 
-  useEffect(() => {
-    console.log("values: ", values)
-  }, [values])
+  // useEffect(() => {
+  //   console.log("values: ", values)
+  // }, [values])
 
   return (
     <Box>
@@ -245,7 +211,7 @@ const AddEntryForm = (props: Props) => {
               }
             />
           </>
-        ) : useType === "OccupationalHealthCare" ? (
+        ) : useType === "OccupationalHealthcare" ? (
           <>
             <TextField
               required
@@ -273,7 +239,7 @@ const AddEntryForm = (props: Props) => {
             />
             <DatePicker
               sx={{ marginBottom: 2 }}
-              label="Start date"
+              label="End date"
               value={values?.sickLeave?.endDate}
               onChange={(newValue) => {
                 dispatch({

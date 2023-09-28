@@ -42,7 +42,7 @@ export const toNewEntry = (
         return hospitalEntry
       case "OccupationalHealthcare":
         if (!("employerName" in object))
-          throw new Error("Incorrect or missing data")
+          throw new Error("Incorrect or missing data employerName")
         const occupationalHealthcareEntry: NewOccupationalHealthcareEntryType =
           {
             type: object.type,
@@ -76,7 +76,7 @@ export const toNewEntry = (
         }
         return healthCheckEntry
       default:
-        throw new Error("Incorrect or missing data")
+        throw new Error("Incorrect or missing data default")
     }
   }
   throw new Error("Incorrect data: some fields are missing")
